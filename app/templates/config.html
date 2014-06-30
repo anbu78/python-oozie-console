@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="form" style="width: 750px;">
+	<div class="w2ui-page page-0">
+		<div class="w2ui-label">Title:</div>
+		<div class="w2ui-field">
+			<input name="title" type="text" maxlength="100" size="60"/>
+		</div>
+		<div class="w2ui-label">Welcome message:</div>
+		<div class="w2ui-field">
+			<textarea name="comments" type="text" style="width: 385px; height: 80px; resize: none"></textarea>
+		</div>
+	</div>
+	<div class="w2ui-page page-1">
+		<div class="w2ui-label">Cluster Name:</div>
+		<div class="w2ui-field">
+			<input name="cluster_name" type="text" maxlength="100" size="60"/>
+		</div>
+		<div class="w2ui-label">Abbrevation:</div>
+		<div class="w2ui-field">
+			<input name="cluster_abbr" type="text" maxlength="10" size="10"/>
+		</div>
+		<div class="w2ui-label">Oozie API Url:</div>
+		<div class="w2ui-field">
+			<input name="oozie_api_url" type="text" maxlength="200" size="80"/>
+		</div>
+	</div>
+	<div class="w2ui-page page-2">
+		<div class="w2ui-label">Filter Name:</div>
+		<div class="w2ui-field">
+			<input name="filter_name" type="text" maxlength="20" size="20"/>
+		</div>
+		<div class="w2ui-label">Job Type:</div>
+		<div class="w2ui-field">
+			<select name="job_type" type="select" maxlength="20">
+                        </select>
+		</div>
+		<div class="w2ui-label">Job Names:</div>
+		<div class="w2ui-field">
+			<input name="job_name" type="text" maxlength="100" size="80"/>
+		</div>
+		<div class="w2ui-label">User:</div>
+		<div class="w2ui-field">
+			<input name="job_user" type="text" maxlength="50" size="50"/>
+		</div>
+		<div class="w2ui-label">Job Status:</div>
+		<div class="w2ui-field">
+			<input name="job_status" type="text" maxlength="200" size="100">
+		</div>
+	</div>
+
+	<div class="w2ui-buttons">
+		<input type="button" value="Reset" name="reset">
+		<input type="button" value="Save" name="save">
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+	$('#form').w2form({ 
+		name   : 'form',
+		header : 'Settings',
+		url    : '{{ url_for('config') }}',
+		fields : [
+			{ name: 'title', type: 'text', required: true },
+			{ name: 'comments',   type: 'text'},
+			{ name: 'cluster_name', type: 'text', required: true },
+			{ name: 'cluster_abbr', type: 'text', required: true },
+			{ name: 'oozie_api_url', type: 'text', required: true },
+			{ name: 'filter_name', type: 'text', required: true },
+			{ name: 'job_type', type: 'select', required: true,
+                            options: { items: ['coord', 'wf', 'bundle'] } },
+			{ name: 'job_name', type: 'text', required: true },
+			{ name: 'job_user', type: 'text', required: true },
+			{ name: 'job_status', type: 'enum', required: true,
+                            options: { items: ['RUNNING', 'RUNNINGWITHERROR', 'PREP', 'SUCCEEDED', 'KILLED'] } },
+		],
+		tabs: [
+			{ id: 'tab1', caption: 'General' },
+			{ id: 'tab2', caption: 'Clusters'},
+			{ id: 'tab3', caption: 'Filters' }
+		],
+		actions: {
+			reset: function () {
+				this.clear();
+			},
+			save: function () {
+				this.save();
+			}
+		}
+	});
+});
+</script>
+{% endblock %}

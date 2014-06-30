@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="grid" style="width: 100%; height: 80%;"></div>
+<script type="text/javascript">
+$(function () {
+	$('#grid').w2grid({ 
+		name: 'grid', 
+		header: '',
+		records: [],
+		show: {
+			header 		: true,
+			toolbar 	: true,
+			footer		: true,
+			lineNumbers	: false,
+			selectColumn: false,
+			expandColumn: false
+		},		
+		columns: [],
+		searches: [
+			{ type: 'int',  field: 'recid', caption: 'ID' },
+			{ type: 'text', field: 'status', caption: 'Status' }
+			//{ type: 'text', field: 'lname', caption: 'Last Name' },
+			//{ type: 'date', field: 'sdate', caption: 'Start Date' }
+		],
+		//onExpand: function (event) {
+	//		$('#'+event.box_id).html('<div style="padding: 10px">Expanded content</div>').animate({ 'height': 100 }, 100);
+	//	}
+	});
+
+        $.getJSON("{{apiurl}}", function(json) {
+          var columns = json.columns
+          var records = json.records
+          var data = json.data
+          for(var i=0; i <columns.length; i++) {
+             columns[i].resizable = true
+          }
+          w2ui['grid'].addColumn(columns)
+          w2ui['grid'].add(records)
+          w2ui['grid'].header = "Job Name: " + data.coordJobName + " Coord Id: " + data.coordJobId
+          w2ui['grid'].refresh();
+        })
+});
+</script>
+{% endblock %}
